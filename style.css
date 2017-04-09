@@ -1,0 +1,67 @@
+@import url(font/setup);
+
+body {
+	white-space: pre;
+	font-family: PerfectDOSVGA437Regular, Courier New, Courier, monospace;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background: black;
+}
+
+#splash {
+	background: url(splash) no-repeat 50% 30px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+#splash a {
+	color: white;
+	display: block;
+	text-decoration: none;
+	position: absolute;
+	top: 450px;
+	width: 126px;
+	left: 50%;
+	margin-left: -63px;
+	cursor: pointer;
+}
+#splash a:hover {
+	color: #f5f;
+}
+#screen {
+	background: black;
+	position: absolute;
+	height: 400px;
+	width: 640px;
+	top: 0;
+	left: 0;
+	top: 50%;
+	left: 50%;
+	margin-left: -320px;
+	margin-top: -200px;
+	color: white;
+	cursor: default;
+	overflow: hidden;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+}
+#screen .glyph {
+	background: black;
+	position: absolute;
+	width: 8px;
+	height: 16px;
+	overflow: hidden;
+	text-align: center;
+	vertical-align: middle;
+	line-height: 16px;
+	font-size: 16px;
+}
+#engine {
+	display: none;
+}
