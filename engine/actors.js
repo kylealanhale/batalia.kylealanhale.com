@@ -22,18 +22,33 @@
     };
     
     var sounds = {};
-    var makeSound = function (name) {
-        var store = [];
-        var add = function () {
-            var audio = new Audio();
-            if (audio.canPlayType('audio/mpeg')) audio.src = 'assets/sounds/' + name + '.mp3';
-            else audio.src = 'assets/sounds/' + name + '.ogg';
-            store.push(audio);
+    var soundFilename = function (name) { return 'assets/sounds/' + name + (!!new Audio().canPlayType('audio/mpeg') ? '.mp3' : '.ogg') };
+    var AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (AudioContext && window.location.protocol != 'file:') {
+        var context = new AudioContext();
+        var download = function (url, success) {var xhr = new XMLHttpRequest(); xhr.open('GET', url, true); xhr.responseType = 'arraybuffer'; xhr.onload = function(e) { if (this.status == 200) { success(xhr.response) } }; xhr.send(); };
+        var makeSound = function (name) {
+            var buffer;
+            download(soundFilename(name), function (data) {
+                context.decodeAudioData(data, function (decoded) { buffer = decoded });
+            });
+            sounds[name] = {play: function () {
+                var source = context.createBufferSource();
+                source.buffer = buffer;
+                source.connect(context.destination);
+                source.start(0);
+            }};
         };
-        add();
-        store[0].load();
-        sounds[name] = {
-            play: function () {
+    }
+    else {
+        var makeSound = function (name) {
+            var store = [];
+            var add = function () {
+                store.push(new Audio(soundFilename(name)));
+            };
+            add();
+            store[0].load();
+            sounds[name] = {play: function () {
                 var before = store.length;
                 if (!store.length) add();
                 var audio = store.pop();
@@ -44,9 +59,9 @@
                 };
                 $(audio).bind('ended', reload);
                 audio.play();
-            }
+            }};
         };
-    };
+    }
     makeSound('fire');
     makeSound('hit');
     
