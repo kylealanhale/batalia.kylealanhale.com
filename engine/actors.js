@@ -26,8 +26,8 @@
         var store = [];
         var add = function () {
             var audio = new Audio();
-            if (audio.canPlayType('audio/mpeg')) audio.src = '/assets/sounds/' + name + '.mp3';
-            else audio.src = '/assets/sounds/' + name + '.ogg';
+            if (audio.canPlayType('audio/mpeg')) audio.src = 'assets/sounds/' + name + '.mp3';
+            else audio.src = 'assets/sounds/' + name + '.ogg';
             store.push(audio);
         };
         add();

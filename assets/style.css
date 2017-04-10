@@ -1,4 +1,4 @@
-@import url(/assets/font/setup.css);
+@import url(font/setup.css);
 
 body {
 	white-space: pre;
@@ -10,7 +10,7 @@ body {
 }
 
 #splash {
-	background: url(/assets/splash.png) no-repeat 50% 30px;
+	background: url(splash.png) no-repeat 50% 30px;
 	position: absolute;
 	top: 0;
 	left: 0;
