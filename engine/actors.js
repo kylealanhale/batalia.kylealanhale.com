@@ -283,15 +283,15 @@
             }
             else instance.draw();
         };
-        instance.uncontrol = function () {
-            $(batalia.scheduler).unbind('player', controller);
-        };
-        $(batalia.scheduler).bind('player', controller);
+        var scheduler = new batalia.Scheduler(this.speed, controller);
+        instance.uncontrol = scheduler.stop;
+        scheduler.start();
     };
     $.extend(Player.prototype, Shape.prototype, {
         name: 'Player',
         width: 3,
         height: 1,
+        speed: 40,
         labelPosition: 0,
         keys: {},
         points: 0,
@@ -333,7 +333,6 @@
             }
         }
     });
-    batalia.scheduler.add('player', 33);
     
     
     
@@ -389,7 +388,6 @@
             Shape.prototype.destroy.apply(this, arguments);
         }
     });
-    batalia.scheduler.add('bullet', 22);
     
     
     
@@ -402,23 +400,25 @@
             new Bullet({relativeTop: 1}),
             new Bullet({relativeLeft: -2})
         ];
+        attributes.speed = owner.speed * 3 / 2;
         CompoundShape.prototype.constructor.apply(this, [attributes]);
     };
     $.extend(Artillery.prototype, CompoundShape.prototype, {
         owner: null,
         fire: function () {
             var instance = this;
-            
+            var scheduler;
+
             instance.owner.isFiring = true;
             sounds.fire.play();
-            
+
             var x = instance.owner.left + 1;
             var y = instance.owner.top;
             
             var times = 0;
             var move = function () {
                 var dead = 0;
-                
+
                 for (var index in instance.pieces) {
                     var bullet = instance.pieces[index];
                     if (!bullet.live) {
@@ -454,13 +454,14 @@
                 times++;
                 
                 if (dead == instance.pieces.length) {
-                    $(batalia.scheduler).unbind('bullet', move);
+                    scheduler.stop();
                     instance.owner.isFiring = false;
                     instance.owner.artillery = null;
                     instance.destroy(false);
                 }
             };
-            $(batalia.scheduler).bind('bullet', move);
+            scheduler = new batalia.Scheduler(this.speed, move);
+            scheduler.start();
         }
     });
 })(window.jQuery);
